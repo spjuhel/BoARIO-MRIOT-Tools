@@ -36,7 +36,7 @@ logger.info(
     f"Starting exiobase3 download for: {snakemake.wildcards.year}"
 )
 
-exio3_folder = pathlib.Path("autodownloads/exiobase3")
+exio3_folder = pathlib.Path(snakemake.output[0]).parent()
 exio3_folder.mkdir(exist_ok=True, parents=True)
 exio_meta = pym.download_exiobase3(
     storage_folder=exio3_folder,
