@@ -37,7 +37,7 @@ logger.info(
 )
 
 exio3_folder = pathlib.Path("autodownloads/exiobase3")
-exio3_folder.mkdir(exist_ok=True)
+exio3_folder.mkdir(exist_ok=True, parents=True)
 exio_meta = pym.download_exiobase3(
     storage_folder=exio3_folder,
     system="ixi",
