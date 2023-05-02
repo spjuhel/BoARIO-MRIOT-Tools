@@ -5,13 +5,13 @@ rule aggregate_exiobase3:
     params:
         full_mrio_params="params/exiobase3/exiobase3_full_params.csv",
     output:
-        "pkls/exiobase3/exiobase3_{aggregation}_{year}.pkl",
+        "pkls/exiobase3/exiobase3_{year}_{aggregation}.pkl",
     conda:
         "../envs/boario-tools-main.yml"
     log:
-        "logs/aggregate_exiobase3/aggregate_exiobase3_{aggregation}_{year}.log",
+        "logs/aggregate_exiobase3/aggregate_exiobase3_{year}_{aggregation}.log",
     benchmark:
-        "benchmarks/aggregate_exiobase3_{aggregation}_{year}.log"
+        "benchmarks/aggregate_exiobase3_{year}_{aggregation}.log"
     script:
         "../scripts/aggregate_exiobase3.py"
 

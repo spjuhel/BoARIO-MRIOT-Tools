@@ -7,11 +7,11 @@ import pandas as pd
 #     params:
 #         full_mrio_params = "mrio-files/params/eora26/eora26_full_params.csv"
 #     output:
-#         "mrio-files/pkls/eora26/eora26_{aggregation}_{year}.pkl"
+#         "mrio-files/pkls/eora26/eora26_{year}_{aggregation}.pkl"
 #     conda:
 #         "../envs/boario-tools-main.yml"
 #     log:
-#         "logs/aggregate_eora26/aggregate_eora26_{aggregation}_{year}.log"
+#         "logs/aggregate_eora26/aggregate_eora26_{year}_{aggregation}.log"
 #     script:
 #         "../scripts/aggregate_eora26.py"
 

@@ -6,11 +6,11 @@ rule aggregate_oecd:
         mrio_pkl="mrio-files/pkls/oecd_v2021/oecd_v2021_full_{year}.pkl",
         aggreg="aggregation-files/oecd_v2021/oecd_v2021_{aggregation}.csv",
     output:
-        "mrio-files/pkls/oecd_v2021/oecd_v2021_{aggregation}_{year}.pkl",
+        "mrio-files/pkls/oecd_v2021/oecd_v2021_{year}_{aggregation}.pkl",
     conda:
         "../envs/boario-tools-main.yml"
     log:
-        "logs/aggregate_oecd_v2021/aggregate_oecd_v2021_{aggregation}_{year}.log",
+        "logs/aggregate_oecd_v2021/aggregate_oecd_v2021_{year}_{aggregation}.log",
     script:
         "../scripts/aggregate_oecd_v2021.py"
 
