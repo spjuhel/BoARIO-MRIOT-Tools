@@ -5,7 +5,7 @@ include: "oecd_treatment.smk"
 
 ALL_FULL_MRIOT = (
     expand(
-        "pkls/{mrio_type}/{mrio_type}_full_{year}.pkl",
+        "pkls/{mrio_type}/{mrio_type}_{year}_full.pkl",
         mrio_type=["euregio", "eora26", "oecd_v2021", "exiobase3"],
         year=[2000, 2010],
     )

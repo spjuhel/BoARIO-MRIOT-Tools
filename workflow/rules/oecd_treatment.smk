@@ -3,7 +3,7 @@ ruleorder: preparse_oecd_v2021 > aggregate_oecd
 
 rule aggregate_oecd:
     input:
-        mrio_pkl="mrio-files/pkls/oecd_v2021/oecd_v2021_full_{year}.pkl",
+        mrio_pkl="mrio-files/pkls/oecd_v2021/oecd_v2021_{year}_full.pkl",
         aggreg="aggregation-files/oecd_v2021/oecd_v2021_{aggregation}.csv",
     output:
         "mrio-files/pkls/oecd_v2021/oecd_v2021_{year}_{aggregation}.pkl",
@@ -19,7 +19,7 @@ rule preparse_oecd_v2021:
     input:
         "mrio-files/csvs/oecd_v2021/ICIO2021_{year}.csv",
     output:
-        "mrio-files/pkls/oecd_v2021/oecd_v2021_full_{year}.pkl",
+        "mrio-files/pkls/oecd_v2021/oecd_v2021_{year}_full.pkl",
     conda:
         "../envs/boario-tools-main.yml"
     log:

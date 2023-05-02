@@ -1,6 +1,6 @@
 rule aggregate_exiobase3:
     input:
-        mrio_pkl="pkls/exiobase3/exiobase3_full_{year}.pkl",
+        mrio_pkl="pkls/exiobase3/exiobase3_{year}_full.pkl",
         aggreg="aggregation-files/exiobase3/exiobase3_{aggregation}.csv",
     params:
         full_mrio_params="params/exiobase3/exiobase3_full_params.csv",
@@ -20,7 +20,7 @@ rule preparse_exiobase3:
     input:
         "autodownloads/exiobase3/IOT_{year}_ixi.zip",
     output:
-        "pkls/exiobase3/exiobase3_full_{year}.pkl",
+        "pkls/exiobase3/exiobase3_{year}_full.pkl",
     conda:
         "../envs/boario-tools-main.yml"
     log:

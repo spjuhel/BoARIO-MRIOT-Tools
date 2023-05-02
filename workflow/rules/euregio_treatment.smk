@@ -32,7 +32,7 @@ rule preparse_euregio:
     input:
         "csvs/euregio/euregio_{year}.csv",
     output:
-        "pkls/euregio/euregio_full_{year}.pkl",
+        "pkls/euregio/euregio_{year}_full.pkl",
     conda:
         "../envs/boario-tools-main.yml"
     log:

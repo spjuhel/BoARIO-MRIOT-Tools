@@ -2,7 +2,7 @@ import pandas as pd
 
 # rule aggregate_eora26:
 #     input:
-#         mrio_pkl="mrio-files/pkls/eora26/eora26_full_{year}.pkl",
+#         mrio_pkl="mrio-files/pkls/eora26/eora26_{year}_full.pkl",
 #         aggreg="aggregation-files/eora26/eora26_{aggregation}.csv"
 #     params:
 #         full_mrio_params = "mrio-files/params/eora26/eora26_full_params.csv"
@@ -34,7 +34,7 @@ rule preparse_eora26:
     input:
         "autodownloads/eora26/Eora26_{year}_bp.zip",
     output:
-        "mrio-files/pkls/eora26/eora26_full_{year}.pkl",
+        "mrio-files/pkls/eora26/eora26_{year}_full.pkl",
     conda:
         "../envs/boario-tools-main.yml"
     log:
