@@ -4,3 +4,6 @@
 # in particular regarding the standardized folder structure mentioned there.
 
 include: "rules/mrio_treatments.smk"
+
+wildcard_constraints:
+    year="\d\d\d\d",
