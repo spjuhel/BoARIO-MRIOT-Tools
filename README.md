@@ -1,6 +1,6 @@
 # Snakemake workflow: `BoARIO-MRIOT-Tools`
 
-[![Snakemake](https://img.shields.io/badge/snakemake-≥6.3.0-brightgreen.svg)](https://snakemake.github.io)
+[![Snakemake](https://img.shields.io/badge/snakemake-≥8.0.0-brightgreen.svg)](https://snakemake.github.io)
 
 A Snakemake workflow for downloading, parsing and aggregating Multi-Regional Input Output Tables (MRIOTs), using [`pymrio`](https://pymrio.readthedocs.io/en/latest/), as well as associated configuration files for the purpose of being used in simulations with the `BoARIO` model [package](https://github.com/spjuhel/BoARIO).
 
