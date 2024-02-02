@@ -1,8 +1,14 @@
 rule parse_icio2021:
     input:
-        expand("{downloaded}/icio2021/ICIO2021_{{year}}.csv",downloaded=config['downloaded_mriot_dir']),
+        expand(
+            "{downloaded}/icio2021/ICIO2021_{{year}}.csv",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
     output:
-        expand("{parsed}/icio2021/icio2021_{{year}}_full.pkl",parsed=config["parsed_mriot_dir"]),
+        expand(
+            "{parsed}/icio2021/icio2021_{{year}}_full.pkl",
+            parsed=config["parsed_mriot_dir"],
+        ),
     conda:
         "../envs/boario-tools-main.yml"
     log:
@@ -13,7 +19,10 @@ rule parse_icio2021:
 
 rule download_icio2021:
     output:
-        expand("{downloaded}/icio2021/ICIO2021_{{year}}.csv",downloaded=config['downloaded_mriot_dir'])
+        expand(
+            "{downloaded}/icio2021/ICIO2021_{{year}}.csv",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
     conda:
         "../envs/boario-tools-main.yml"
     log:

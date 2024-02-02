@@ -1,8 +1,9 @@
 import os
 import zipfile
 import shutil
-#from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
-#HTTPS = HTTPRemoteProvider()
+
+# from snakemake.remote.HTTP import RemoteProvider as HTTPRemoteProvider
+# HTTPS = HTTPRemoteProvider()
 
 OFFICE_BIN = shutil.which("libreoffice")
 if OFFICE_BIN is not None:
@@ -15,30 +16,41 @@ if shutil.which("unoserver") is not None:
 else:
     UNOSERVER_EXISTS = False
 
+
 wildcard_constraints:
     aggregation=r"\d+_sectors|common_aggreg",
+
 
 rule start_unoserver:
     params:
         office=OFFICE_BIN,
     log:
-        "logs/unoserver.log"
+        "logs/unoserver.log",
     output:
-        service("unoserver")
+        service("unoserver"),
     shell:
         "unoserver --executable {params.office} 2> {log};"
 
 
 rule parse_euregio_test:
     input:
-        expand("{downloaded}/euregio/euregio_2000_full.pkl",downloaded=config['parsed_mriot_dir']),
+        expand(
+            "{downloaded}/euregio/euregio_2000_full.pkl",
+            downloaded=config["parsed_mriot_dir"],
+        ),
 
 
 rule parse_euregio:
     input:
-        expand("{downloaded}/euregio/euregio_{{year}}.csv",downloaded=config['downloaded_mriot_dir']),
+        expand(
+            "{downloaded}/euregio/euregio_{{year}}.csv",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
     output:
-        expand("{parsed}/euregio/euregio_{{year}}_full.pkl",parsed=config['parsed_mriot_dir']),
+        expand(
+            "{parsed}/euregio/euregio_{{year}}_full.pkl",
+            parsed=config["parsed_mriot_dir"],
+        ),
     conda:
         "../envs/boario-tools-main.yml"
     log:
@@ -49,35 +61,56 @@ rule parse_euregio:
 
 rule create_euregio_csvs_test:
     input:
-        expand("{downloaded}/euregio/euregio_2000.csv",downloaded=config['downloaded_mriot_dir']),
+        expand(
+            "{downloaded}/euregio/euregio_2000.csv",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
 
 
 rule create_euregio_csvs:
     input:
-        expand("{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",downloaded=config['downloaded_mriot_dir']),
+        expand(
+            "{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
     output:
-        expand("{downloaded}/euregio/euregio_{{year}}.csv",downloaded=config['downloaded_mriot_dir'])
+        expand(
+            "{downloaded}/euregio/euregio_{{year}}.csv",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
     shell:
         """
         xlsx2csv -s 3 {input} {output}
         """
 
+
 rule create_euregio_xlsx_test:
     input:
-        expand("{downloaded}/euregio/EURegionalIOtable_2000.xlsx",downloaded=config['downloaded_mriot_dir']),
+        expand(
+            "{downloaded}/euregio/EURegionalIOtable_2000.xlsx",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
 
 
 rule create_euregio_xlsx:
     input:
-        inp_file=expand("{downloaded}/euregio/EURegionalIOtable_{{year}}.ods",downloaded=config['downloaded_mriot_dir']),
+        inp_file=expand(
+            "{downloaded}/euregio/EURegionalIOtable_{{year}}.ods",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
     params:
-        folder=expand("{downloaded}/euregio/",downloaded=config['downloaded_mriot_dir']),
+        folder=expand(
+            "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
+        ),
         office_exists=OFFICE_EXISTS,
         uno_exists=UNOSERVER_EXISTS,
     resources:
         libre_office_instance=1,
     output:
-        expand("{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",downloaded=config['downloaded_mriot_dir']),
+        expand(
+            "{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
     log:
         "logs/parse_euregio/convert_euregio_xlsx_{year}.log",
     script:
@@ -86,11 +119,13 @@ rule create_euregio_xlsx:
 
 rule download_extract_euregio:
     params:
-        folder=expand("{downloaded}/euregio/",downloaded=config['downloaded_mriot_dir']),
+        folder=expand(
+            "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
+        ),
     output:
         expand(
             "{downloaded}/euregio/EURegionalIOtable_{years}.ods",
-            downloaded=config['downloaded_mriot_dir'],
+            downloaded=config["downloaded_mriot_dir"],
             years=[2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010],
         ),
     log:
