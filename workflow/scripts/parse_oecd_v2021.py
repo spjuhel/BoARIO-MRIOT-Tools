@@ -7,7 +7,7 @@ import pickle as pkl
 logging.basicConfig(
     filename=snakemake.log[0],
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] - %(message)s",
+    format="%(asctime)s %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
@@ -69,13 +69,13 @@ def lexico_reindex(mrio: pym.IOSystem) -> pym.IOSystem:
     return mrio
 
 
-def preparse_eora26(mrio_zip: str, output: str, inv_treatment=True):
+def parse_oecd_v2018(mrio_zip: str, output: str):
     logger.info(
         "Make sure you use the same python environment as the one loading the pickle file (especial pymrio and pandas version !)"
     )
     logger.info("Your current environment is: {}".format(os.environ["CONDA_PREFIX"]))
     mrio_path = pathlib.Path(mrio_zip)
-    mrio_pym = pym.parse_eora26(path=mrio_path)
+    mrio_pym = pym.parse_oecd(path=mrio_path)
     logger.info("Removing unnecessary IOSystem attributes")
     attr = [
         "Z",
@@ -96,19 +96,6 @@ def preparse_eora26(mrio_zip: str, output: str, inv_treatment=True):
             delattr(mrio_pym, at)
     assert isinstance(mrio_pym, pym.IOSystem)
     logger.info("Done")
-    logger.info(
-        'EORA has the re-import/re-export sector which other mrio often don\'t have (ie EXIOBASE), we put it in "Other".'
-    )
-    mrio_pym.rename_sectors({"Re-export & Re-import": "Others"})
-    mrio_pym.aggregate_duplicates()
-
-    if inv_treatment:
-        # invs = mrio_pym.Y.loc[:, (slice(None), "Inventory_adjustment")].sum(axis=1)
-        # invs.name = "Inventory_use"
-        # invs_neg = pd.DataFrame(-invs).T
-        # invs_neg[invs_neg < 0] = 0
-        # iova = pd.concat([iova, invs_neg], axis=0)
-        mrio_pym.Y = mrio_pym.Y.clip(lower=0)
     logger.info("Computing the missing IO components")
     mrio_pym.calc_all()
     logger.info("Done")
@@ -118,9 +105,9 @@ def preparse_eora26(mrio_zip: str, output: str, inv_treatment=True):
     save_path = pathlib.Path(output)
     logger.info("Saving to {}".format(save_path.absolute()))
     save_path.parent.mkdir(parents=True, exist_ok=True)
-    setattr(mrio_pym, "monetary_factor", 1000)
+    setattr(mrio_pym, "monetary_factor", 1000000)
     with open(save_path, "wb") as f:
         pkl.dump(mrio_pym, f)
 
 
-preparse_eora26(snakemake.input[0], snakemake.output[0], inv_treatment=True)
+parse_oecd_v2018(snakemake.input[0], snakemake.output[0])

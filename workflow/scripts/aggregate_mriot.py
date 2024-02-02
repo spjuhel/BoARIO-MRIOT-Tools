@@ -1,10 +1,16 @@
-import logging
-import os
+import sys, os
+import logging, traceback
+from typing import Optional, Union
 import pathlib
-import sys
-import traceback
+from pathlib import Path
+import json
+import pickle as pkl
 
+import numpy as np
+import pandas as pd
 import pymrio as pym
+
+from boario_tools.mriot import aggreg
 
 logging.basicConfig(
     filename=snakemake.log[0],
@@ -36,15 +42,11 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 logger.info(
-    f"Starting Exiobase3 download for the year: {snakemake.wildcards.year}"
+    f"Starting mrio aggregation to {snakemake.wildcards.aggregation} for: {snakemake.input.full_mriot_pkl}"
 )
 
-output_dir = pathlib.Path(snakemake.output[0]).parent
-output_dir.mkdir(exist_ok=True, parents=True)
-
-exio_meta = pym.download_exiobase3(
-    storage_folder=output_dir,
-    system=snakemake.wildcards.system,
-    years=[snakemake.wildcards.year],
+aggreg(
+    mrio_path=snakemake.input.full_mriot_pkl[0],
+    sector_aggregator_path=snakemake.input.aggreg[0],
+    save_path=snakemake.output,
 )
-logger.info("Exiobase3 download completed successfully.")

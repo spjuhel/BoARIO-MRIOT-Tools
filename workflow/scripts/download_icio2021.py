@@ -36,15 +36,14 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 logger.info(
-    f"Starting Exiobase3 download for the year: {snakemake.wildcards.year}"
+    f"Starting ICIO2021 (OECD) download for the year: {snakemake.wildcards.year}"
 )
 
 output_dir = pathlib.Path(snakemake.output[0]).parent
 output_dir.mkdir(exist_ok=True, parents=True)
 
-exio_meta = pym.download_exiobase3(
+exio_meta = pym.download_oecd(
     storage_folder=output_dir,
-    system=snakemake.wildcards.system,
     years=[snakemake.wildcards.year],
 )
-logger.info("Exiobase3 download completed successfully.")
+logger.info("ICIO2021 download completed successfully.")

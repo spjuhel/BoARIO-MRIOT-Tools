@@ -7,6 +7,7 @@ dependencies:
   - pyarrow
   - pymrio
   - scikit-learn
+  - odfpy
   - pip
   - pip:
-      - "git+https://github.com/spjuhel/BoARIO-Tools.git#v0.0.1"
+      - "git+https://github.com/spjuhel/BoARIO-Tools.git#v0.1.1d"

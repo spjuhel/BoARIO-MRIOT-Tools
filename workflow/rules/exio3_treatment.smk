@@ -1,49 +1,37 @@
-rule aggregate_exiobase3:
+wildcard_constraints:
+    aggregation=r"\d+_sectors",
+    system=r"ixi|pxp"
+
+rule parse_exiobase3_test:
     input:
-        mrio_pkl="pkls/exiobase3/exiobase3_{year}_full.pkl",
-        aggreg="aggregation-files/exiobase3/exiobase3_{aggregation}.csv",
-    params:
-        full_mrio_params="params/exiobase3/exiobase3_full_params.csv",
+        expand("{parsed}/exiobase3_{{system}}/exiobase3_ixi_1995_full.pkl",parsed=config['parsed_mriot_dir']),
+
+rule parse_exiobase3:
+    input:
+        expand("{downloaded}/exiobase3_{{system}}/IOT_{{year}}_{{system}}.zip",downloaded=config['downloaded_mriot_dir']),
     output:
-        "pkls/exiobase3/exiobase3_{year}_{aggregation}.pkl",
+        expand("{parsed}/exiobase3_{{system}}/exiobase3_{{system}}_{{year}}_full.pkl",parsed=config['parsed_mriot_dir']),
     conda:
         "../envs/boario-tools-main.yml"
     log:
-        "logs/aggregate_exiobase3/aggregate_exiobase3_{year}_{aggregation}.log",
-    benchmark:
-        "benchmarks/aggregate_exiobase3_{year}_{aggregation}.log"
-    script:
-        "../scripts/aggregate_exiobase3.py"
-
-
-rule preparse_exiobase3:
-    input:
-        "autodownloads/exiobase3/IOT_{year}_ixi.zip",
-    output:
-        "pkls/exiobase3/exiobase3_{year}_full.pkl",
-    conda:
-        "../envs/boario-tools-main.yml"
-    log:
-        "logs/preparse_exiobase3/preparse_exiobase3_{year}.log",
+        "logs/parse_exiobase3/parse_exiobase3_{system}_{year}.log",
     resources:
         mem_mb=6000,
     benchmark:
-        "benchmarks/preparse_exiobase3_{year}.log"
+        "benchmarks/parse_exiobase3_{year}_{system}.log"
     script:
-        "../scripts/preparse_exiobase3.py"
-
+        "../scripts/parse_exiobase3.py"
 
 rule download_exiobase3_test:
     input:
-        "autodownloads/exiobase3/IOT_1995_ixi.zip",
-
+        expand("{downloaded}/exiobase3_{{system}}/IOT_1995_ixi.zip",downloaded=config['downloaded_mriot_dir']),
 
 rule download_exiobase3:
     output:
-        "autodownloads/exiobase3/IOT_{year}_ixi.zip",
+        expand("{downloaded}/exiobase3_{{system}}/IOT_{{year}}_{{system}}.zip",downloaded=config['downloaded_mriot_dir']),
     conda:
         "../envs/boario-tools-main.yml"
     log:
-        "logs/download_exiobase3/download_exiobase3_{year}.log",
+        "logs/download_exiobase3/download_exiobase3_{year}_{system}.log",
     script:
         "../scripts/download_exiobase3.py"

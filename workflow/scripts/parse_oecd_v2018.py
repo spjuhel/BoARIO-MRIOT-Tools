@@ -69,7 +69,7 @@ def lexico_reindex(mrio: pym.IOSystem) -> pym.IOSystem:
     return mrio
 
 
-def preparse_oecd_v2018(mrio_zip: str, output: str):
+def parse_oecd_v2018(mrio_zip: str, output: str):
     logger.info(
         "Make sure you use the same python environment as the one loading the pickle file (especial pymrio and pandas version !)"
     )
@@ -105,9 +105,8 @@ def preparse_oecd_v2018(mrio_zip: str, output: str):
     save_path = pathlib.Path(output)
     logger.info("Saving to {}".format(save_path.absolute()))
     save_path.parent.mkdir(parents=True, exist_ok=True)
-    setattr(mrio_pym, "monetary_factor", 1000000)
     with open(save_path, "wb") as f:
         pkl.dump(mrio_pym, f)
 
 
-preparse_oecd_v2018(snakemake.input[0], snakemake.output[0])
+parse_oecd_v2018(snakemake.input[0], snakemake.output[0])

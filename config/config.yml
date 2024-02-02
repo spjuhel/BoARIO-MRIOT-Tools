@@ -1,1 +1,16 @@
-pkls_dir: pkls/
+# config/config.yaml
+
+# Define parameters relevant to the MRIOT dataset
+years: [2020, 2021, 2022]
+#system: "default"
+
+# Specify the output directories
+downloaded_mriot_dir: "downloaded"
+parsed_mriot_dir: "parsed"
+aggregated_mriot_dir: "aggregated"
+
+aggregation_csv_dir: "config/aggregation_files"
+mriot_params_dir: "config/mriot_params"
+
+EXIO3:
+  system: "ixi"

@@ -37,15 +37,20 @@ def convert(inpt, output, folder, office_exists, uno_exists):
             "Creating xlsx files require at least libreoffice which wasn't found (and optionally unoserver). You may wan't to convert EUREGIO files by yourself if you are unable to install libreoffice"
         )
     if uno_exists:
+        logger.info(f"Using unoserver with 'unoconvert --port 2002 --convert-to xlsx {inpt} {output}'")
         os.system(f"unoconvert --port 2002 --convert-to xlsx {inpt} {output}")
     else:
+        logger.info(f"Using libreoffice with 'libreoffice --convert-to xlsx --outdir {folder} {inpt}'")
         os.system(f"libreoffice --convert-to xlsx --outdir {folder} {inpt}")
 
+logger.info(f"Converting {snakemake.input.inp_file} to xlsx")
 
 convert(
     snakemake.input.inp_file,
     snakemake.output,
-    snakemake.params.folder,
+    snakemake.params.folder[0],
     snakemake.params.office_exists,
     snakemake.params.uno_exists,
 )
+
+logger.info("Conversion done !")

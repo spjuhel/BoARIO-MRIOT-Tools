@@ -4,6 +4,8 @@ import pymrio as pym
 import pathlib
 import pickle as pkl
 
+from boario_tools.mriot import lexico_reindex
+
 logging.basicConfig(
     filename=snakemake.log[0],
     level=logging.INFO,
@@ -34,48 +36,13 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 
-def lexico_reindex(mrio: pym.IOSystem) -> pym.IOSystem:
-    """Re-index IOSystem lexicographicaly
-
-    Sort indexes and columns of the dataframe of a :ref:`pymrio.IOSystem` by
-    lexical order.
-
-    Parameters
-    ----------
-    mrio : pym.IOSystem
-        The IOSystem to sort
-
-    Returns
-    -------
-    pym.IOSystem
-        The sorted IOSystem
-
-    """
-    for attr in ["Z", "Y", "x", "A"]:
-        if getattr(mrio, attr) is None:
-            raise ValueError(
-                "Attribute {} is None, did you forget to calc_all() the MRIO ?".format(
-                    attr
-                )
-            )
-    mrio.Z = mrio.Z.reindex(sorted(mrio.Z.index), axis=0)  # type: ignore
-    mrio.Z = mrio.Z.reindex(sorted(mrio.Z.columns), axis=1)  # type: ignore
-    mrio.Y = mrio.Y.reindex(sorted(mrio.Y.index), axis=0)  # type: ignore
-    mrio.Y = mrio.Y.reindex(sorted(mrio.Y.columns), axis=1)  # type: ignore
-    mrio.x = mrio.x.reindex(sorted(mrio.x.index), axis=0)  # type: ignore
-    mrio.A = mrio.A.reindex(sorted(mrio.A.index), axis=0)  # type: ignore
-    mrio.A = mrio.A.reindex(sorted(mrio.A.columns), axis=1)  # type: ignore
-
-    return mrio
-
-
-def preparse_exio3(mrio_zip: str, output: str):
+def parse_oecd_v2018(mrio_zip: str, output: str, year:int):
     logger.info(
         "Make sure you use the same python environment as the one loading the pickle file (especial pymrio and pandas version !)"
     )
     logger.info("Your current environment is: {}".format(os.environ["CONDA_PREFIX"]))
     mrio_path = pathlib.Path(mrio_zip)
-    mrio_pym = pym.parse_exiobase3(path=mrio_path)
+    mrio_pym = pym.parse_oecd(path=mrio_path, year=year)
     logger.info("Removing unnecessary IOSystem attributes")
     attr = [
         "Z",
@@ -106,8 +73,9 @@ def preparse_exio3(mrio_zip: str, output: str):
     logger.info("Saving to {}".format(save_path.absolute()))
     save_path.parent.mkdir(parents=True, exist_ok=True)
     setattr(mrio_pym, "monetary_factor", 1000000)
+    mrio_pym.meta.change_meta("name", "oecd-icio2021")
     with open(save_path, "wb") as f:
         pkl.dump(mrio_pym, f)
 
 
-preparse_exio3(snakemake.input[0], snakemake.output[0])
+parse_oecd_v2018(snakemake.input[0], snakemake.output[0], snakemake.wildcards.year)

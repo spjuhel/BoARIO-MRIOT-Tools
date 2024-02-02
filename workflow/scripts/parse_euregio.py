@@ -5,6 +5,8 @@ import pathlib
 import pickle as pkl
 import pandas as pd
 
+from boario_tools.mriot import lexico_reindex
+
 REGIONS_RENAMING = {"DEE1": "DEE0", "DEE2": "DEE0", "DEE3": "DEE0"}
 
 logging.basicConfig(
@@ -37,42 +39,9 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 
-def lexico_reindex(mrio: pym.IOSystem) -> pym.IOSystem:
-    """Re-index IOSystem lexicographicaly
-
-    Sort indexes and columns of the dataframe of a :ref:`pymrio.IOSystem` by
-    lexical order.
-
-    Parameters
-    ----------
-    mrio : pym.IOSystem
-        The IOSystem to sort
-
-    Returns
-    -------
-    pym.IOSystem
-        The sorted IOSystem
-
-    """
-    for attr in ["Z", "Y", "x", "A"]:
-        if getattr(mrio, attr) is None:
-            raise ValueError(
-                "Attribute {} is None, did you forget to calc_all() the MRIO ?".format(
-                    attr
-                )
-            )
-    mrio.Z = mrio.Z.reindex(sorted(mrio.Z.index), axis=0)  # type: ignore
-    mrio.Z = mrio.Z.reindex(sorted(mrio.Z.columns), axis=1)  # type: ignore
-    mrio.Y = mrio.Y.reindex(sorted(mrio.Y.index), axis=0)  # type: ignore
-    mrio.Y = mrio.Y.reindex(sorted(mrio.Y.columns), axis=1)  # type: ignore
-    mrio.x = mrio.x.reindex(sorted(mrio.x.index), axis=0)  # type: ignore
-    mrio.A = mrio.A.reindex(sorted(mrio.A.index), axis=0)  # type: ignore
-    mrio.A = mrio.A.reindex(sorted(mrio.A.columns), axis=1)  # type: ignore
-
-    return mrio
-
-
 def correct_regions(euregio: pym.IOSystem):
+    """Renames DEE1-3 to DEE0 to match 2006 NUTS2 shapefiles
+    """
     euregio.rename_regions(REGIONS_RENAMING).aggregate_duplicates()
     return euregio
 
@@ -148,7 +117,7 @@ def build_from_csv(csv_file, inv_treatment=True):
     return ioz, ioy, iova
 
 
-def preparse_euregio(mrio_csv: str, output: str, year):
+def parse_euregio(mrio_csv: str, output: str, year):
     logger.info(
         "Make sure you use the same python environment as the one loading the pickle file (especial pymrio and pandas version !)"
     )
@@ -164,7 +133,7 @@ def preparse_euregio(mrio_csv: str, output: str, year):
             columns=["unit"],
         ),
     )
-    logger.info(f"Correcting germany regions : {REGIONS_RENAMING}")
+    logger.info(f"Correcting germany regions (to match NUTS2 2006 shapefiles) : {REGIONS_RENAMING}")
     euregio = correct_regions(euregio)
     logger.info("Computing the missing IO components")
     euregio.calc_all()
@@ -182,4 +151,4 @@ def preparse_euregio(mrio_csv: str, output: str, year):
         pkl.dump(euregio, f)
 
 
-preparse_euregio(snakemake.input[0], snakemake.output[0], snakemake.wildcards.year)
+parse_euregio(snakemake.input[0], snakemake.output[0], snakemake.wildcards.year)
