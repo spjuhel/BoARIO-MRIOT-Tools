@@ -47,8 +47,8 @@ logger.info(f"Converting {snakemake.input.inp_file} to xlsx")
 
 convert(
     snakemake.input.inp_file,
-    snakemake.output,
-    snakemake.params.folder[0],
+    snakemake.output.files,
+    snakemake.output.folder[0],
     snakemake.params.office_exists,
     snakemake.params.uno_exists,
 )

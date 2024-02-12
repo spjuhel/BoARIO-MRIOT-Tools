@@ -99,15 +99,15 @@ rule create_euregio_xlsx:
             downloaded=config["downloaded_mriot_dir"],
         ),
     params:
-        folder=expand(
-            "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
-        ),
         office_exists=OFFICE_EXISTS,
         uno_exists=UNOSERVER_EXISTS,
     resources:
         libre_office_instance=1,
     output:
-        expand(
+        folder=directory(expand(
+            "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
+        ),)
+        files=expand(
             "{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",
             downloaded=config["downloaded_mriot_dir"],
         ),
