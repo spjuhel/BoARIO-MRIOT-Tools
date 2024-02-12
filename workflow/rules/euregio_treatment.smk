@@ -122,7 +122,7 @@ rule download_euregio:
             "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
         )),
         files=expand(
-            "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"]
+            "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"],
             files=["2000-2005-ODS.zip","2006-2010-ODS.zip"]
         )
     shell:
@@ -135,8 +135,11 @@ rule download_euregio:
 
 rule extract_euregio:
     input:
-        expand(
-            "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"]
+        folder=directory(expand(
+            "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
+        )),
+        files=expand(
+            "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"],
             files=["2000-2005-ODS.zip","2006-2010-ODS.zip"]
         )
     output:
@@ -149,6 +152,6 @@ rule extract_euregio:
         "logs/download_euregio/download_euregio.log",
     shell:
         """
-        unzip -o {input.files[0]} -d {params.folder}
-        unzip -o {input.files[1]} -d {params.folder}
+        unzip -o {input.files[0]} -d {input.folder}
+        unzip -o {input.files[1]} -d {input.folder}
         """
