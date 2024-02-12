@@ -32,12 +32,6 @@ rule start_unoserver:
         "unoserver --executable {params.office} 2> {log};"
 
 
-rule libre_office_mock_service:
-    output:
-        service("libreoffice"),
-    shell:
-        "ln -s /dev/random {output}; sleep 10000"
-
 rule parse_euregio_test:
     input:
         expand(
@@ -100,7 +94,6 @@ rule create_euregio_xlsx_test:
 
 rule create_euregio_xlsx:
     input:
-        office="libreoffice",
         inp_file=expand(
             "{downloaded}/euregio/EURegionalIOtable_{{year}}.ods",
             downloaded=config["downloaded_mriot_dir"],
