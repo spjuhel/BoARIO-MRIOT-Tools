@@ -106,7 +106,7 @@ rule create_euregio_xlsx:
     output:
         folder=directory(expand(
             "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
-        ),)
+        ),),
         files=expand(
             "{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",
             downloaded=config["downloaded_mriot_dir"],
