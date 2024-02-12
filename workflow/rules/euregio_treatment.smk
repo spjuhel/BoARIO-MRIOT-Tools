@@ -116,12 +116,29 @@ rule create_euregio_xlsx:
     script:
         "../scripts/euregio_convert_xlsx.py"
 
-
-rule download_extract_euregio:
-    params:
-        folder=expand(
+rule download_euregio:
+    output:
+        folder=directory(expand(
             "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
-        ),
+        )),
+        files=expand(
+            "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"]
+            files=["2000-2005-ODS.zip","2006-2010-ODS.zip"]
+        )
+    shell:
+        """
+        mkdir -p {output.folder}
+        wget -O {output.files[0]} "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2000-2005-ODS.zip"
+        wget -O {output.file[1]} "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2006-2010-ODS.zip"
+        """
+
+
+rule extract_euregio:
+    input:
+        expand(
+            "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"]
+            files=["2000-2005-ODS.zip","2006-2010-ODS.zip"]
+        )
     output:
         expand(
             "{downloaded}/euregio/EURegionalIOtable_{years}.ods",
@@ -132,9 +149,6 @@ rule download_extract_euregio:
         "logs/download_euregio/download_euregio.log",
     shell:
         """
-        mkdir -p {params.folder}
-        wget -O {params.folder}2000-2005-ODS.zip "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2000-2005-ODS.zip"
-        wget -O {params.folder}2006-2010-ODS.zip "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2006-2010-ODS.zip"
-        unzip -o {params.folder}2000-2005-ODS.zip -d {params.folder}
-        unzip -o {params.folder}2006-2010-ODS.zip -d {params.folder}
+        unzip -o {input.files[0]} -d {params.folder}
+        unzip -o {input.files[1]} -d {params.folder}
         """
