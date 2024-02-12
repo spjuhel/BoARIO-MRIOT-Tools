@@ -115,9 +115,9 @@ rule create_euregio_xlsx:
 
 rule download_euregio:
     output:
-        folder=directory(expand(
+        folder=ancient(directory(expand(
             "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
-        )),
+        ))),
         files=expand(
             "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"],
             files=["2000-2005-ODS.zip","2006-2010-ODS.zip"]
