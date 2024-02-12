@@ -1,5 +1,6 @@
 import sys, os
 import logging, traceback
+from pathlib import Path
 
 logging.basicConfig(
     filename=snakemake.log[0],
@@ -31,7 +32,8 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 
-def convert(inpt, output, folder, office_exists, uno_exists):
+def convert(inpt, output, office_exists, uno_exists):
+    folder = Path(output).parent
     if not office_exists:
         raise FileNotFoundError(
             "Creating xlsx files require at least libreoffice which wasn't found (and optionally unoserver). You may wan't to convert EUREGIO files by yourself if you are unable to install libreoffice"
@@ -47,8 +49,7 @@ logger.info(f"Converting {snakemake.input.inp_file} to xlsx")
 
 convert(
     snakemake.input.inp_file,
-    snakemake.output.files,
-    snakemake.output.folder[0],
+    snakemake.output.files[0],
     snakemake.params.office_exists,
     snakemake.params.uno_exists,
 )

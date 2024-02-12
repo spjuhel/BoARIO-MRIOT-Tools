@@ -104,9 +104,6 @@ rule create_euregio_xlsx:
     resources:
         libre_office_instance=1,
     output:
-        folder=directory(expand(
-            "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
-        ),),
         files=expand(
             "{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",
             downloaded=config["downloaded_mriot_dir"],
