@@ -126,7 +126,7 @@ rule download_euregio:
         """
         mkdir -p {output.folder}
         wget -O {output.files[0]} "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2000-2005-ODS.zip"
-        wget -O {output.file[1]} "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2006-2010-ODS.zip"
+        wget -O {output.files[1]} "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2006-2010-ODS.zip"
         """
 
 
