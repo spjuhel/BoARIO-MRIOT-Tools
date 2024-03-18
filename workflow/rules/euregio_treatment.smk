@@ -67,23 +67,6 @@ rule create_euregio_csvs_test:
         ),
 
 
-rule create_euregio_csvs:
-    input:
-        expand(
-            "{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",
-            downloaded=config["downloaded_mriot_dir"],
-        ),
-    output:
-        expand(
-            "{downloaded}/euregio/euregio_{{year}}.csv",
-            downloaded=config["downloaded_mriot_dir"],
-        ),
-    shell:
-        """
-        xlsx2csv -s 3 {input} {output}
-        """
-
-
 rule create_euregio_xlsx_test:
     input:
         expand(
@@ -91,6 +74,26 @@ rule create_euregio_xlsx_test:
             downloaded=config["downloaded_mriot_dir"],
         ),
 
+
+rule create_euregio_csvs:
+    input:
+        inp_file=expand(
+            "{downloaded}/euregio/EURegionalIOtable_{{year}}.ods",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
+    params:
+        office_exists=OFFICE_EXISTS,
+    resources:
+        libre_office_instance=1,
+    output:
+        files=expand(
+            "{downloaded}/euregio/euregio_{{year}}.csv",
+            downloaded=config["downloaded_mriot_dir"],
+        ),
+    log:
+        "logs/parse_euregio/convert_euregio_csvs_{year}.log",
+    script:
+        "../scripts/euregio_convert_csvs.py"
 
 rule create_euregio_xlsx:
     input:
