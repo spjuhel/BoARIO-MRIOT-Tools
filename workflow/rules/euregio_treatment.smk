@@ -66,19 +66,10 @@ rule create_euregio_csvs_test:
             downloaded=config["downloaded_mriot_dir"],
         ),
 
-
-rule create_euregio_xlsx_test:
-    input:
-        expand(
-            "{downloaded}/euregio/EURegionalIOtable_2000.xlsx",
-            downloaded=config["downloaded_mriot_dir"],
-        ),
-
-
 rule create_euregio_csvs:
     input:
         inp_file=expand(
-            "{downloaded}/euregio/EURegionalIOtable_{{year}}.ods",
+            "{downloaded}/euregio/RegionalIOtable_{{year}}.xlsb",
             downloaded=config["downloaded_mriot_dir"],
         ),
     params:
@@ -95,27 +86,6 @@ rule create_euregio_csvs:
     script:
         "../scripts/euregio_convert_csvs.py"
 
-rule create_euregio_xlsx:
-    input:
-        inp_file=expand(
-            "{downloaded}/euregio/EURegionalIOtable_{{year}}.ods",
-            downloaded=config["downloaded_mriot_dir"],
-        ),
-    params:
-        office_exists=OFFICE_EXISTS,
-        uno_exists=UNOSERVER_EXISTS,
-    resources:
-        libre_office_instance=1,
-    output:
-        files=expand(
-            "{downloaded}/euregio/EURegionalIOtable_{{year}}.xlsx",
-            downloaded=config["downloaded_mriot_dir"],
-        ),
-    log:
-        "logs/parse_euregio/convert_euregio_xlsx_{year}.log",
-    script:
-        "../scripts/euregio_convert_xlsx.py"
-
 rule download_euregio:
     output:
         folder=directory(expand(
@@ -123,13 +93,12 @@ rule download_euregio:
         )),
         files=expand(
             "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"],
-            files=["2000-2005-ODS.zip","2006-2010-ODS.zip"]
+            files=["2000-2010-XLSB.zip"]
         )
     shell:
         """
         mkdir -p {output.folder}
-        wget -O {output.files[0]} "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2000-2005-ODS.zip"
-        wget -O {output.files[1]} "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2006-2010-ODS.zip"
+        wget -O {output.files[0]} "https://dataportaal.pbl.nl/downloads/PBL_Euregio/PBL-EUREGIO-2000-2010-XLSB.zip"
         """
 
 
@@ -140,11 +109,11 @@ rule extract_euregio:
         )),
         files=expand(
             "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"],
-            files=["2000-2005-ODS.zip","2006-2010-ODS.zip"]
+            files=["2000-2010-XLSB.zip"]
         )
     output:
         expand(
-            "{downloaded}/euregio/EURegionalIOtable_{years}.ods",
+            "{downloaded}/euregio/RegionalIOtable_{years}.xlsb",
             downloaded=config["downloaded_mriot_dir"],
             years=[2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010],
         ),
@@ -153,5 +122,4 @@ rule extract_euregio:
     shell:
         """
         unzip -o {input.files[0]} -d {input.folder}
-        unzip -o {input.files[1]} -d {input.folder}
         """

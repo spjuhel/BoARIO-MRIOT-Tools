@@ -39,10 +39,10 @@ def convert(inpt, output, office_exists):
             "Creating csvs files require libreoffice which wasn't found. You may wan't to convert EUREGIO files by yourself if you are unable to install libreoffice"
         )
     logger.info(f"Executing: libreoffice --convert-to 'csv:Text - txt - csv (StarCalc):44,34,0,1,,,,,,,,3' {folder} {inpt}")
-    os.system(f"libreoffice --convert-to 'csv:Text - txt - csv (StarCalc):44,34,0,1,,,,,,,,3' {folder} {inpt}")
+    os.system(f"libreoffice --convert-to 'csv:Text - txt - csv (StarCalc):44,34,0,1,,,,,,,,3' --outdir {folder} {inpt}")
     filename = Path(inpt[0]).name
     new_filename = "euregio_" + filename.split('_')[1].split('.')[0].replace('-', '_') + ".csv"
-    old_path = folder / filename.replace('.ods', '-{}.csv'.format(filename.split('_')[1].split('.')[0]))
+    old_path = folder / filename.replace('.xlsb', '-{}.csv'.format(filename.split('_')[1].split('.')[0]))
     new_path = folder / new_filename
     logger.info(f"Executing: mv {old_path} {new_path}")
     os.rename(old_path, new_path)
