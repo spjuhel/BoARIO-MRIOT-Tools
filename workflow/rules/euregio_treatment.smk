@@ -51,6 +51,8 @@ rule parse_euregio:
             "{parsed}/euregio/euregio_{{year}}_full.pkl",
             parsed=config["parsed_mriot_dir"],
         ),
+    resources:
+        mem_mb_per_cpu=6000,
     conda:
         "../envs/boario-tools-main.yml"
     log:
