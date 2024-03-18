@@ -40,10 +40,12 @@ def convert(inpt, output, office_exists):
         )
     logger.info(f"Executing: libreoffice --convert-to 'csv:Text - txt - csv (StarCalc):44,34,0,1,,,,,,,,3' {folder} {inpt}")
     os.system(f"libreoffice --convert-to 'csv:Text - txt - csv (StarCalc):44,34,0,1,,,,,,,,3' {folder} {inpt}")
-    filename = str(inpt).replace('.ods', '-{}.csv'.format(str(inpt).split('_')[1].split('.')[0]))
-    newfilename="euregio_" + filename.split('_')[1].split('.')[0].replace('-', '_') + ".csv"
-    logger.info(f"Executing: mv {filename} {newfilename}")
-    os.system(f"mv {filename} {newfilename}")
+    filename = Path(inpt).name
+    new_filename = "euregio_" + filename.split('_')[1].split('.')[0].replace('-', '_') + ".csv"
+    old_path = folder / filename.replace('.ods', '-{}.csv'.format(filename.split('_')[1].split('.')[0]))
+    new_path = folder / new_filename
+    logger.info(f"Executing: mv {old_path} {new_path}")
+    os.rename(old_path, new_path)
 
 logger.info(f"Converting {snakemake.input.inp_file} to csv")
 
