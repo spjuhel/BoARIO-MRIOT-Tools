@@ -121,7 +121,11 @@ def parse_euregio(mrio_csv: str, output: str, year):
     logger.info(
         "Make sure you use the same python environment as the one loading the pickle file (especial pymrio and pandas version !)"
     )
-    logger.info("Your current environment is: {}".format(os.environ["CONDA_PREFIX"]))
+    try:
+        logger.info("Your current environment is: {}".format(os.environ["CONDA_PREFIX"]))
+    except KeyError:
+        logger.info("Could not find CONDA_PREFIX, this is normal if you are not using conda.")
+
     ioz, ioy, iova = build_from_csv(mrio_csv, inv_treatment=True)
     euregio = pym.IOSystem(
         Z=ioz,

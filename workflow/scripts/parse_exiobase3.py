@@ -75,7 +75,11 @@ def parse_exio3(mrio_zip: str, output: str, remove_attribute: bool=True):
     logger.info(
         "Make sure you use the same python environment as the one loading the pickle file (especial pymrio and pandas version !)"
     )
-    logger.info("Your current environment is: {}".format(os.environ["CONDA_PREFIX"]))
+    try:
+        logger.info("Your current environment is: {}".format(os.environ["CONDA_PREFIX"]))
+    except KeyError:
+        logger.info("Could not find CONDA_PREFIX, this is normal if you are not using conda.")
+
     mrio_path = pathlib.Path(mrio_zip)
     mrio_pym = pym.parse_exiobase3(path=mrio_path)
     logger.info("Removing unnecessary IOSystem attributes")
