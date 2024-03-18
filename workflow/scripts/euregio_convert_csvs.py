@@ -40,7 +40,7 @@ def convert(inpt, output, office_exists):
         )
     logger.info(f"Executing: libreoffice --convert-to 'csv:Text - txt - csv (StarCalc):44,34,0,1,,,,,,,,3' {folder} {inpt}")
     os.system(f"libreoffice --convert-to 'csv:Text - txt - csv (StarCalc):44,34,0,1,,,,,,,,3' {folder} {inpt}")
-    filename = inpt.replace('.ods', '-{}.csv'.format(filename.split('_')[1].split('.')[0]))
+    filename = inpt.replace('.ods', '-{}.csv'.format(inpt.split('_')[1].split('.')[0]))
     newfilename="euregio_" + filename.split('_')[1].split('.')[0].replace('-', '_') + ".csv"
     logger.info(f"Executing: mv {filename} {newfilename}")
     os.system(f"mv {filename} {newfilename}")
