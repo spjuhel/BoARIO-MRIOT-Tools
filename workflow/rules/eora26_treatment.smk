@@ -14,7 +14,7 @@ rule parse_eora26:
     log:
         "logs/parse_eora26/parse_eora26_{year}.log",
     resources:
-        mem_per_cpu=6000,
+        mem_mb_per_cpu=6000,
     benchmark:
         "benchmarks/mrios/parse_eora26_{year}.log"
     script:
