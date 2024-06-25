@@ -89,6 +89,7 @@ def parse_exio3(mrio_zip: str, output: str, remove_attribute: bool=True):
         "x",
         "A",
         "As",
+        "G",
         "L",
         "unit",
         "population",
