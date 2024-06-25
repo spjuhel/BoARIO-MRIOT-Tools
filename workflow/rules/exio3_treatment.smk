@@ -27,9 +27,9 @@ rule parse_exiobase3:
     log:
         "logs/parse_exiobase3/parse_exiobase3_{system}_{year}.log",
     resources:
-        mem_mb_per_cpu=6000,
-        disk_mb=2000,
-        disk_mib=2000,
+        mem_mb_per_cpu=10000,
+        disk_mb=3000,
+        disk_mib=3000,
     benchmark:
         "benchmarks/parse_exiobase3_{year}_{system}.log"
     script:
