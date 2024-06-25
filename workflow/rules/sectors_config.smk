@@ -1,6 +1,13 @@
 wildcard_constraints:
     mriot_name=r"eora26|euregio|icio2021",
 
+rule all_mriots_sector_config:
+    input:
+        sectors_config=expand(
+            "{mriot_params_dir}/{mriot_name}_full_sectors.csv",
+            mriot_params_dir=config["mriot_params_dir"],
+            mriot_name=["eora26","euregio","icio2021","exiobase3_ixi"]
+        ),
 
 rule sector_config_from_exio3:
     input:
