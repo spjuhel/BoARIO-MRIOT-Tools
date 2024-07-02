@@ -53,6 +53,8 @@ def parse_eora26(mrio_zip: str, output: str, inv_treatment=True):
         "Y",
         "x",
         "A",
+        "As",
+        "G",
         "L",
         "unit",
         "population",

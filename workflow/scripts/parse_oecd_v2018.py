@@ -86,6 +86,8 @@ def parse_oecd_v2018(mrio_zip: str, output: str):
         "Y",
         "x",
         "A",
+        "As",
+        "G",
         "L",
         "unit",
         "population",
