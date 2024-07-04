@@ -9,7 +9,7 @@ Basic metals,True,0.0,90.0,2.5384615384615383,60.0
 Chemical and chemical products,True,0.0,90.0,3.0,60.0
 Coke and refined petroleum products,True,0.0,90.0,3.0,60.0
 "Computer, electronic and optical equipment",True,0.025,90.0,1.5,60.0
-Construction,True,0.55,90.0,1.25,60.0
+Construction,False,0.55,90.0,0.5,60.0
 Education,True,0.0,90.0,2.0,60.0
 Electrical equipment,True,0.1,90.0,1.5,60.0
 "Electricity, gas, steam and air conditioning supply",True,0.0,90.0,2.875,60.0

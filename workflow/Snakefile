@@ -3,6 +3,7 @@
 # https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
 # in particular regarding the standardized folder structure mentioned there.
 from snakemake.utils import min_version
+from boario_tools.regex_patterns import MRIOT_BASENAME_REGEX, MRIOT_YEAR_REGEX, MRIOT_AGGREG_SECTORS_REGEX, MRIOT_AGGREG_REGIONS_REGEX, MRIOT_AGGREG_REGEX, MRIOT_FULLNAME_REGEX
 
 ##### set minimum snakemake version #####
 min_version("8.0.0")
@@ -12,4 +13,6 @@ configfile: "config/config.yml"
 include: "rules/mrio_treatments.smk"
 
 wildcard_constraints:
-    year=r"\d\d\d\d",
+    year=MRIOT_YEAR_REGEX,
+    mriot_name=MRIOT_BASENAME_REGEX,
+    aggregation=MRIOT_AGGREG_REGEX,

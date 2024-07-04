@@ -1,5 +1,5 @@
 wildcard_constraints:
-    mriot_name=r"eora26|euregio|icio2021",
+    mriot_name_noexio="icio2021|eora26|euregio"
 
 rule all_mriots_sector_config:
     input:
@@ -21,12 +21,12 @@ rule sector_config_from_exio3:
         ),
     output:
         sectors_config=expand(
-            "{mriot_params_dir}/{{mriot_name}}_full_sectors.csv",
+            "{mriot_params_dir}/{{mriot_name_no_exio}}_full_sectors.csv",
             mriot_params_dir=config["mriot_params_dir"],
         ),
     conda:
         "../envs/boario-tools-main.yml"
     params:
-        mrio_type="{mriot_name}",
+        mrio_type="{mriot_name_no_exio}",
     script:
         "../scripts/params_gen_from_exiobase3_full.py"

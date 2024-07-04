@@ -11,32 +11,12 @@ if OFFICE_BIN is not None:
 else:
     OFFICE_EXISTS = False
 
-if shutil.which("unoserver") is not None:
-    UNOSERVER_EXISTS = False
-else:
-    UNOSERVER_EXISTS = False
-
-
-wildcard_constraints:
-    aggregation=r"\d+_sectors|common_aggreg",
-
-
-rule start_unoserver:
-    params:
-        office=OFFICE_BIN,
-    log:
-        "logs/unoserver.log",
-    output:
-        service("unoserver"),
-    shell:
-        "unoserver --executable {params.office} 2> {log};"
-
-
 rule parse_euregio_test:
     input:
         expand(
-            "{downloaded}/euregio/euregio_2000_full.pkl",
+            "{downloaded}/euregio/euregio_2000_{base_aggreg}.pkl",
             downloaded=config["parsed_mriot_dir"],
+            base_aggreg=config["mriot_base_aggreg"]["euregio"],
         ),
 
 
@@ -48,8 +28,9 @@ rule parse_euregio:
         ),
     output:
         expand(
-            "{parsed}/euregio/euregio_{{year}}_full.pkl",
+            "{parsed}/euregio/euregio_{{year}}_{base_aggreg}.pkl",
             parsed=config["parsed_mriot_dir"],
+            base_aggreg=config["mriot_base_aggreg"]["euregio"],
         ),
     resources:
         mem_mb_per_cpu=6000,
@@ -86,7 +67,7 @@ rule create_euregio_csvs:
     log:
         "logs/parse_euregio/convert_euregio_csvs_{year}.log",
     script:
-        "../scripts/euregio_convert_csvs.py"
+        "../scripts/euregio_xlsx2csvs.py"
 
 rule download_euregio:
     output:

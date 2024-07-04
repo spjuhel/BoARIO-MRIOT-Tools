@@ -6,3 +6,14 @@ parsed_mriot_dir: "parsed"
 aggregated_mriot_dir: "aggregated"
 aggregation_csv_dir: "config/aggregation_files"
 mriot_params_dir: "config/mriot_params"
+
+sectors_common_aggreg_file: "sectors_common_aggreg.ods"
+regions_common_aggreg_file: "region_common_aggreg.ods"
+
+mriot_base_aggreg:
+  exiobase3_ixi : "full_sectors_full_regions"
+  exiobase3_pxp : "full_sectors_full_regions"
+  eora26: "full_no_reexport_sectors_full_regions"
+  euregio: "full_sectors_full_regions"
+
+common_aggreg: "common_sectors_common_regions"

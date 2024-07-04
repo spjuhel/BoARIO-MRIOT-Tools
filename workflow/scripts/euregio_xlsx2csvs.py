@@ -2,7 +2,7 @@ from pathlib import Path
 import sys
 import logging, traceback
 
-from boario_tools.mriot import exio3_zip_to_pkl
+from boario_tools.mriot import euregio_convert_xlsx2csv
 
 logging.basicConfig(
     filename=snakemake.log[0],
@@ -33,4 +33,14 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 # Install exception handler
 sys.excepthook = handle_exception
 
-exio3_zip_to_pkl(snakemake.input[0], Path( snakemake.output[0] ).parent)
+logger.info(f"Converting {snakemake.input.inp_file} to csv")
+out_dir = Path(snakemake.output.files[0]).parent
+euregio_convert_xlsx2csv(
+    snakemake.input[0],
+    out_dir,
+    snakemake.params.office_exists,
+)
+
+
+
+logger.info("Conversion done !")

@@ -12,6 +12,7 @@ ALL_FULL_MRIOT = expand(
 )
 
 
+
 rule all_mriot:
     input:
         ALL_FULL_MRIOT,
@@ -20,32 +21,36 @@ rule all_mriot:
 rule aggregate_icio2021_common_test:
     input:
         expand(
-            "{aggregated}/icio2021/icio2021_2003_common_aggreg.pkl",
+            "{aggregated}/icio2021/icio2021_2003_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
+            common_aggreg=config["common_aggreg"]
         ),
 
 
 rule aggregate_eora26_common_test:
     input:
         expand(
-            "{aggregated}/eora26/eora26_2016_common_aggreg.pkl",
+            "{aggregated}/eora26/eora26_2010_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
+            common_aggreg=config["common_aggreg"]
         ),
 
 
 rule aggregate_euregio_common_test:
     input:
         expand(
-            "{aggregated}/euregio/euregio_2000_common_aggreg.pkl",
+            "{aggregated}/euregio/euregio_2000_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
+            common_aggreg=config["common_aggreg"]
         ),
 
 
 rule aggregate_exiobase3_common_test:
     input:
         expand(
-            "{aggregated}/exiobase3_ixi/exiobase3_ixi_1995_common_aggreg.pkl",
+            "{aggregated}/exiobase3_ixi/exiobase3_ixi_1995_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
+            common_aggreg=config["common_aggreg"]
         ),
 
 
@@ -60,32 +65,23 @@ rule aggregate_exiobase3_test:
 rule aggregate_euregio_test:
     input:
         expand(
-            "{aggregated}/euregio/euregio_2000_common_aggreg.pkl",
+            "{aggregated}/euregio/euregio_2000_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
+            common_aggreg=config["common_aggreg"]
         ),
 
 
-def decide_aggreg_file(wildcards):
-    return wildcards.aggregation == "common_aggreg"
+def get_full_mriot(wildcards):
+    full_agg_name = config["mriot_base_aggreg"][wildcards.mriot_name]
+    parsed = config["parsed_mriot_dir"]
+    mriot_name = wildcards.mriot_name
+    year = wildcards.year
+    return f"{parsed}/{mriot_name}/{mriot_name}_{year}_{full_agg_name}.pkl"
 
 
 rule aggregate_mriot:
     input:
-        full_mriot_pkl=expand(
-            "{parsed}/{{mriot_name}}/{{mriot_name}}_{{year}}_full.pkl",
-            parsed=config["parsed_mriot_dir"],
-        ),
-        aggreg=branch(
-            decide_aggreg_file,
-            then=expand(
-                "{aggregation_dir}/sectors_common_aggreg.ods",
-                aggregation_dir=config["aggregation_csv_dir"],
-            ),
-            otherwise=expand(
-                "{aggregation_dir}/{{mriot_name}}/{{mriot_name}}_{{aggregation}}.csv",
-                aggregation_dir=config["aggregation_csv_dir"],
-            ),
-        ),
+        full_mriot_pkl = get_full_mriot
     output:
         expand(
             "{aggregated}/{{mriot_name}}/{{mriot_name}}_{{year}}_{{aggregation}}.pkl",

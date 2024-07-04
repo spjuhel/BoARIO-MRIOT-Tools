@@ -1,8 +1,7 @@
-from pathlib import Path
 import sys
 import logging, traceback
 
-from boario_tools.mriot import exio3_zip_to_pkl
+from boario_tools.mriot import parse_wiod_v2016
 
 logging.basicConfig(
     filename=snakemake.log[0],
@@ -33,4 +32,4 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 # Install exception handler
 sys.excepthook = handle_exception
 
-exio3_zip_to_pkl(snakemake.input[0], Path( snakemake.output[0] ).parent)
+parse_wiod_v2016(snakemake.input[0], snakemake.output[0])

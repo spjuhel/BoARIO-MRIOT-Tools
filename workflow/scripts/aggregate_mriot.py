@@ -1,3 +1,4 @@
+import re
 import sys, os
 import logging, traceback
 from typing import Optional, Union
@@ -10,7 +11,8 @@ import numpy as np
 import pandas as pd
 import pymrio as pym
 
-from boario_tools.mriot import aggreg
+from boario_tools.mriot import aggreg, load_mrio
+from boario_tools.regex_patterns import MRIOT_AGGREG_REGEX
 
 logging.basicConfig(
     filename=snakemake.log[0],
@@ -45,8 +47,14 @@ logger.info(
     f"Starting mrio aggregation to {snakemake.wildcards.aggregation} for: {snakemake.input.full_mriot_pkl}"
 )
 
+mriot_file = Path(snakemake.input.full_mriot_pkl)
+mriot = load_mrio(mriot_file.stem, snakemake.config["parsed_mriot_dir"])
+sectors_aggregation, regions_aggregation = re.match(MRIOT_AGGREG_REGEX, snakemake.wildcards.aggregation).groups()
+save_dir = Path(snakemake.output[0]).parent
+
 aggreg(
-    mrio_path=snakemake.input.full_mriot_pkl[0],
-    sector_aggregator_path=snakemake.input.aggreg[0],
-    save_path=snakemake.output,
+    mriot=mriot,
+    sectors_aggregation=sectors_aggregation,
+    regions_aggregation=regions_aggregation,
+    save_dir=save_dir,
 )
