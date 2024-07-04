@@ -8,7 +8,7 @@ rule parse_eora26:
         expand(
             "{parsed}/eora26/eora26_{{year}}_{mriot_base_aggreg}.pkl",
             parsed=config["parsed_mriot_dir"],
-            mriot_base_aggreg=config["mriot_base_aggreg"]["eora26"]
+            mriot_base_aggreg=config["mriot_base_aggreg"]["eora26"],
         ),
     conda:
         "../envs/boario-tools-main.yml"

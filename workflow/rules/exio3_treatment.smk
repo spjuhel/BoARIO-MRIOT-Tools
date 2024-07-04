@@ -1,5 +1,5 @@
 wildcard_constraints:
-    system=r"ixi|pxp"
+    system=r"ixi|pxp",
 
 
 rule parse_exiobase3_test:
@@ -7,7 +7,7 @@ rule parse_exiobase3_test:
         expand(
             "{parsed}/exiobase3_ixi/exiobase3_ixi_1995_{base_aggreg}.pkl",
             parsed=config["parsed_mriot_dir"],
-            base_aggreg=config["mriot_base_aggreg"]["exiobase3_ixi"]
+            base_aggreg=config["mriot_base_aggreg"]["exiobase3_ixi"],
         ),
 
 
@@ -21,7 +21,7 @@ rule parse_exiobase3:
         expand(
             "{parsed}/exiobase3_{{system}}/exiobase3_{{system}}_{{year}}_{base_aggreg}.pkl",
             parsed=config["parsed_mriot_dir"],
-            base_aggreg=config["mriot_base_aggreg"]["exiobase3_ixi"]
+            base_aggreg=config["mriot_base_aggreg"]["exiobase3_ixi"],
         ),
     conda:
         "../envs/boario-tools-main.yml"

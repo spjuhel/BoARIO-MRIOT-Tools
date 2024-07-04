@@ -12,7 +12,6 @@ ALL_FULL_MRIOT = expand(
 )
 
 
-
 rule all_mriot:
     input:
         ALL_FULL_MRIOT,
@@ -23,7 +22,7 @@ rule aggregate_icio2021_common_test:
         expand(
             "{aggregated}/icio2021/icio2021_2003_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
-            common_aggreg=config["common_aggreg"]
+            common_aggreg=config["common_aggreg"],
         ),
 
 
@@ -32,7 +31,7 @@ rule aggregate_eora26_common_test:
         expand(
             "{aggregated}/eora26/eora26_2010_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
-            common_aggreg=config["common_aggreg"]
+            common_aggreg=config["common_aggreg"],
         ),
 
 
@@ -41,7 +40,7 @@ rule aggregate_euregio_common_test:
         expand(
             "{aggregated}/euregio/euregio_2000_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
-            common_aggreg=config["common_aggreg"]
+            common_aggreg=config["common_aggreg"],
         ),
 
 
@@ -50,7 +49,7 @@ rule aggregate_exiobase3_common_test:
         expand(
             "{aggregated}/exiobase3_ixi/exiobase3_ixi_1995_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
-            common_aggreg=config["common_aggreg"]
+            common_aggreg=config["common_aggreg"],
         ),
 
 
@@ -67,7 +66,7 @@ rule aggregate_euregio_test:
         expand(
             "{aggregated}/euregio/euregio_2000_{common_aggreg}.pkl",
             aggregated=config["aggregated_mriot_dir"],
-            common_aggreg=config["common_aggreg"]
+            common_aggreg=config["common_aggreg"],
         ),
 
 
@@ -81,7 +80,7 @@ def get_full_mriot(wildcards):
 
 rule aggregate_mriot:
     input:
-        full_mriot_pkl = get_full_mriot
+        full_mriot_pkl=get_full_mriot,
     output:
         expand(
             "{aggregated}/{{mriot_name}}/{{mriot_name}}_{{year}}_{{aggregation}}.pkl",

@@ -11,6 +11,7 @@ if OFFICE_BIN is not None:
 else:
     OFFICE_EXISTS = False
 
+
 rule parse_euregio_test:
     input:
         expand(
@@ -49,6 +50,7 @@ rule create_euregio_csvs_test:
             downloaded=config["downloaded_mriot_dir"],
         ),
 
+
 rule create_euregio_csvs:
     input:
         inp_file=expand(
@@ -69,15 +71,17 @@ rule create_euregio_csvs:
     script:
         "../scripts/euregio_xlsx2csvs.py"
 
+
 rule download_euregio:
     output:
-        folder=directory(expand(
-            "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
-        )),
+        folder=directory(
+            expand("{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"])
+        ),
         files=expand(
-            "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"],
-            files=["2000-2010-XLSB.zip"]
-        )
+            "{downloaded}/euregio/{files}",
+            downloaded=config["downloaded_mriot_dir"],
+            files=["2000-2010-XLSB.zip"],
+        ),
     shell:
         """
         mkdir -p {output.folder}
@@ -87,13 +91,14 @@ rule download_euregio:
 
 rule extract_euregio:
     input:
-        folder=ancient(expand(
-            "{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"]
-        )),
+        folder=ancient(
+            expand("{downloaded}/euregio/", downloaded=config["downloaded_mriot_dir"])
+        ),
         files=expand(
-            "{downloaded}/euregio/{files}", downloaded=config["downloaded_mriot_dir"],
-            files=["2000-2010-XLSB.zip"]
-        )
+            "{downloaded}/euregio/{files}",
+            downloaded=config["downloaded_mriot_dir"],
+            files=["2000-2010-XLSB.zip"],
+        ),
     output:
         expand(
             "{downloaded}/euregio/RegionalIOtable_{years}.xlsb",
