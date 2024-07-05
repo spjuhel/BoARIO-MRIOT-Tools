@@ -88,6 +88,8 @@ rule aggregate_mriot:
         ),
     conda:
         "../envs/boario-tools-main.yml"
+    wildcard_constraints:
+        aggregation="full_sectors_common_regions|common_sectors_full_regions|full_no_reexport_sectors_common_regions|common_sectors_common_regions"
     log:
         "logs/aggregate_{mriot_name}/aggregate_{mriot_name}_{year}_{aggregation}.log",
     benchmark:
