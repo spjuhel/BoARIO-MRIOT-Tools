@@ -26,3 +26,4 @@ wildcard_constraints:
     year=MRIOT_YEAR_REGEX,
     mriot_name=MRIOT_BASENAME_REGEX,
     aggregation=MRIOT_AGGREG_REGEX,
+    sectors_aggregation=MRIOT_AGGREG_SECTORS_REGEX

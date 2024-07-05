@@ -10,4 +10,4 @@ dependencies:
   - odfpy
   - pip
   - pip:
-      - "git+https://github.com/spjuhel/BoARIO-Tools.git#v0.2.0"
+      - "git+https://github.com/spjuhel/BoARIO-Tools.git#v0.2.2"

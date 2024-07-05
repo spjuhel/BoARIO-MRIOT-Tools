@@ -1,7 +1,12 @@
 from importlib import resources
+from boario_tools.mriot import find_sectors_agg
 import pandas as pd
-import logging
+
 import sys, traceback
+import logging
+import pandas as pd
+
+sys.path.append("../others")
 
 logging.basicConfig(
     filename=snakemake.log[0],
@@ -12,6 +17,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
+
 
 def handle_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, KeyboardInterrupt):
@@ -31,30 +37,25 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 # Install exception handler
 sys.excepthook = handle_exception
 
-mriot_basename = snakemake.wildcards.mriot_name_noexio_full_sectors
-colname = snakemake.params["mrio_dict"][mriot_basename]
 
-sectors_df = pd.read_csv(
-    snakemake.input.exio3_sectors_config[0], index_col=0, decimal="."
-)
-if snakemake.params["alt_aggregation_master"] is not None:
+sectors_df = pd.read_csv(snakemake.input.sectors_config[0], index_col=0, decimal=".")
+if snakemake.params["alt_aggregation_file"] is not None:
     aggregation_master_df = pd.read_excel(
-        snakemake.params.alt_aggregation_master, sheet_name=0, index_col=0
+        snakemake.params.alt_aggregation_file, sheet_name=0, index_col=0
     )
 else:
-    with resources.path(
-        "boario_tools.data.aggregation_files.exiobase3_ixi",
-        "exiobase3_ixi_to_other_mrio_sectors.ods",
-    ) as agg_path:
-        aggregation_master_df = pd.read_excel(
-            agg_path, sheet_name=0, index_col=0
+    with resources.path("boario_tools.data", "aggregation_files") as agg_path:
+        aggregation_master_df = find_sectors_agg(
+            snakemake.wildcards.mriot_name,
+            snakemake.params["base_aggreg"][snakemake.wildcards.mriot_name],
+            snakemake.wildcards.sectors_aggregation,
+            agg_files_path=agg_path,
         )
-
 
 res = (
     aggregation_master_df.join(sectors_df)[
         [
-            colname,
+            "new sector",
             "affected",
             "rebuilding_factor",
             "inventory_size",
@@ -62,7 +63,7 @@ res = (
             "inventory_tau",
         ]
     ]
-    .groupby(colname)
+    .groupby("new sector")
     .agg(
         {
             "affected": any,
