@@ -21,7 +21,7 @@ rule full_sector_config_from_exio3:
             "icio2021_full_reworked_sectors": "ICIO2021_reworked sectors name",
         }
     log:
-        "logs/{mriot_name}_full_config_from_exio3.log",
+        "logs/full_configs_from_exio3.log",
     output:
         sectors_config=expand(
             "{mriot_params_dir}/{config}.csv",
