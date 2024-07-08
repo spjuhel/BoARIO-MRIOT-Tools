@@ -48,7 +48,7 @@ else:
             agg_path, sheet_name=0, index_col=0
         )
 
-for mrio, colname in snakemake.params["mrio_dict"]:
+for mrio, colname in snakemake.params["mrio_dict"].items():
     res = (
         aggregation_master_df.join(sectors_df)[
             [
