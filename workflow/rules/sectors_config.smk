@@ -7,14 +7,6 @@ base_aggreg ={
 }
 
 
-rule all_mriots_full_sectors_config:
-    input:
-        sectors_config=expand(
-            "{mriot_params_dir}/{mriot_name}_full_sectors.csv",
-            mriot_params_dir=config["mriot_params_dir"],
-            mriot_name=["eora26", "euregio", "icio2021", "exiobase3_ixi"],
-        ),
-
 rule full_sector_config_from_exio3:
     input:
         exio3_sectors_config=expand(
@@ -29,29 +21,37 @@ rule full_sector_config_from_exio3:
             "icio2021_full_reworked_sectors": "ICIO2021_reworked sectors name",
         }
     log:
-        "logs/{mriot_name_noexio_full_sectors}_config_from_exio3.log",
-    wildcard_constraints:
-        mriot_name_noexio_full_sectors = r"icio2021_full_reworked_sectors|eora26_full_no_reexport_sectors|euregio_full_sectors"
+        "logs/{mriot_name}_full_config_from_exio3.log",
     output:
         sectors_config=expand(
-            "{mriot_params_dir}/{{mriot_name_noexio_full_sectors}}.csv",
+            "{mriot_params_dir}/{config}.csv",
             mriot_params_dir=config["mriot_params_dir"],
+            configs=["icio2021_full_reworked_sectors",
+                     "eora26_full_no_reexport_sectors",
+                     "euregio_full_sectors"]
         ),
     conda:
         "../envs/boario-tools-main.yml"
     script:
         "../scripts/params_gen_from_exiobase3_full.py"
 
-def get_base_sectors_config(wildcards):
-    return expand(
-        "{mriot_params_dir}/{name}.csv",
-        mriot_params_dir=config["mriot_params_dir"],
-        name = wildcards.mriot_name+"_"+base_aggreg[wildcards.mriot_name]
-    )
+def is_eora26(wildcards):
+    return "eora26" is in wildcards.mriot_name
+
+def is_icio2021(wildcards):
+    return "icio2021" is in wildcards.mriot_name
 
 rule aggreg_sector_config:
     input:
-        sectors_config=get_base_sectors_config
+        sectors_config=branch(
+            condition=is_eora,
+            then="eora26_full_no_reexport_sectors.csv",
+            otherwise=branch(
+                condition=is_icio2021,
+                then="icio2021_full_reworked_sectors.csv",
+                otherwise="{mriot_name}_full_sectors.csv"
+            )
+        )
     output:
         agg_sectors_config=expand(
             "{mriot_params_dir}/{{mriot_name}}_{{sectors_aggregation}}.csv",
