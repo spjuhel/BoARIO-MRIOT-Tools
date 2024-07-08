@@ -49,7 +49,7 @@ rule aggreg_sector_config:
                 otherwise=branch(
                     condition=is_icio2021,
                     then=f"{config['mriot_params_dir']}/icio2021_full_reworked_sectors.csv",
-                    otherwise=f"{config['mriot_params_dir']}/{mriot_name}_full_sectors.csv"
+                    otherwise=f"{config['mriot_params_dir']}"+"/{{mriot_name}}_full_sectors.csv"
                 )
             )
     output:
