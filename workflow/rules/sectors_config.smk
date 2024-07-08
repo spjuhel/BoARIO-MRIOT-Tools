@@ -36,10 +36,10 @@ rule full_sector_config_from_exio3:
         "../scripts/params_gen_from_exiobase3_full.py"
 
 def is_eora26(wildcards):
-    return "eora26" is in wildcards.mriot_name
+    return ("eora26" in wildcards.mriot_name)
 
 def is_icio2021(wildcards):
-    return "icio2021" is in wildcards.mriot_name
+    return ("icio2021" in wildcards.mriot_name)
 
 rule aggreg_sector_config:
     input:
