@@ -1,4 +1,5 @@
 from importlib import resources
+from pathlib import Path
 import pandas as pd
 import logging
 import sys, traceback
@@ -31,11 +32,8 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 # Install exception handler
 sys.excepthook = handle_exception
 
-mriot_basename = snakemake.wildcards.mriot_name
-colname = snakemake.params["mrio_dict"][mriot_basename]
-
 sectors_df = pd.read_csv(
-    snakemake.input.exio3_sectors_config[0], index_col=0, decimal="."
+    snakemake.input.exio3_sectors_config, index_col=0, decimal="."
 )
 if snakemake.params["alt_aggregation_master"] is not None:
     aggregation_master_df = pd.read_excel(
@@ -50,29 +48,28 @@ else:
             agg_path, sheet_name=0, index_col=0
         )
 
-
-res = (
-    aggregation_master_df.join(sectors_df)[
-        [
-            colname,
-            "affected",
-            "rebuilding_factor",
-            "inventory_size",
-            "productive_capital_to_va_ratio",
-            "inventory_tau",
+for mrio, colname in snakemake.params["mrio_dict"]:
+    res = (
+        aggregation_master_df.join(sectors_df)[
+            [
+                colname,
+                "affected",
+                "rebuilding_factor",
+                "inventory_size",
+                "productive_capital_to_va_ratio",
+                "inventory_tau",
+            ]
         ]
-    ]
-    .groupby(colname)
-    .agg(
-        {
-            "affected": any,
-            "rebuilding_factor": "sum",
-            "inventory_size": "mean",
-            "productive_capital_to_va_ratio": "mean",
-            "inventory_tau": "mean",
-        }
+        .groupby(colname)
+        .agg(
+            {
+                "affected": any,
+                "rebuilding_factor": "sum",
+                "inventory_size": "mean",
+                "productive_capital_to_va_ratio": "mean",
+                "inventory_tau": "mean",
+            }
+        )
+        .fillna("Infinity")
     )
-    .fillna("Infinity")
-)
-
-res.to_csv(snakemake.output[0])
+    res.to_csv(Path(snakemake.output[0]).parent / (mrio+".csv") )
