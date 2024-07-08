@@ -26,7 +26,7 @@ rule full_sector_config_from_exio3:
         sectors_config=expand(
             "{mriot_params_dir}/{config}.csv",
             mriot_params_dir=config["mriot_params_dir"],
-            configs=["icio2021_full_reworked_sectors",
+            config=["icio2021_full_reworked_sectors",
                      "eora26_full_no_reexport_sectors",
                      "euregio_full_sectors"]
         ),
