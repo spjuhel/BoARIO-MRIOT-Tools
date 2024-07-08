@@ -31,7 +31,7 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 # Install exception handler
 sys.excepthook = handle_exception
 
-mriot_basename = snakemake.wildcards.mriot_name_noexio_full_sectors
+mriot_basename = snakemake.wildcards.mriot_name
 colname = snakemake.params["mrio_dict"][mriot_basename]
 
 sectors_df = pd.read_csv(

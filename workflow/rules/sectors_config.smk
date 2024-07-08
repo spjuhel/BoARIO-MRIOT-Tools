@@ -1,12 +1,5 @@
 ruleorder: full_sector_config_from_exio3 > aggreg_sector_config
 
-base_aggreg ={
-    "exiobase3_ixi":"full_sectors",
-    "euregio":"full_sectors",
-    "eora26":"full_no_reexport_sectors"
-}
-
-
 rule full_sector_config_from_exio3:
     input:
         exio3_sectors_config=expand(
@@ -54,14 +47,14 @@ rule aggreg_sector_config:
             )
     output:
         agg_sectors_config=expand(
-            "{mriot_params_dir}/{{mriot_name}}_{{sectors_aggregation}}.csv",
+            "{mriot_params_dir}/{{mriot_name}}_{{sectors_aggregation_nofull}}.csv",
             mriot_params_dir=config["mriot_params_dir"],
         ),
     params:
         alt_aggregation_file = None,
         base_aggreg = base_aggreg
     log:
-        "logs/{mriot_name}_{sectors_aggregation}_config.log",
+        "logs/{mriot_name}_{sectors_aggregation_nofull}_config.log",
     conda:
         "../envs/boario-tools-main.yml"
     script:

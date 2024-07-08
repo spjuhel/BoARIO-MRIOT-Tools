@@ -48,7 +48,7 @@ else:
         aggregation_master_df = find_sectors_agg(
             snakemake.wildcards.mriot_name,
             snakemake.params["base_aggreg"][snakemake.wildcards.mriot_name],
-            snakemake.wildcards.sectors_aggregation,
+            snakemake.wildcards.sectors_aggregation_nofull,
             agg_files_path=agg_path,
         )
 
