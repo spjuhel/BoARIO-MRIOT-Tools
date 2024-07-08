@@ -44,7 +44,7 @@ def is_icio2021(wildcards):
 rule aggreg_sector_config:
     input:
         sectors_config=branch(
-            condition=is_eora,
+            condition=is_eora26,
             then="eora26_full_no_reexport_sectors.csv",
             otherwise=branch(
                 condition=is_icio2021,
