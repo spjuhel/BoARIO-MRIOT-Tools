@@ -41,7 +41,7 @@ sys.excepthook = handle_exception
 
 base_aggreg = re.search(MRIOT_AGGREG_SECTORS_REGEX,snakemake.input.sectors_config)
 
-sectors_df = pd.read_csv(snakemake.input.sectors_config[0], index_col=0, decimal=".")
+sectors_df = pd.read_csv(snakemake.input.sectors_config, index_col=0, decimal=".")
 if snakemake.params["alt_aggregation_file"] is not None:
     aggregation_master_df = pd.read_excel(
         snakemake.params.alt_aggregation_file, sheet_name=0, index_col=0
