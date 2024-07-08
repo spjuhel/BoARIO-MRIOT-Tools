@@ -1,5 +1,7 @@
 from importlib import resources
+import re
 from boario_tools.mriot import find_sectors_agg
+from boario_tools.regex_patterns import MRIOT_AGGREG_SECTORS_REGEX
 import pandas as pd
 
 import sys, traceback
@@ -37,6 +39,7 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 # Install exception handler
 sys.excepthook = handle_exception
 
+base_aggreg = re.search(MRIOT_AGGREG_SECTORS_REGEX,snakemake.input.sectors_config)
 
 sectors_df = pd.read_csv(snakemake.input.sectors_config[0], index_col=0, decimal=".")
 if snakemake.params["alt_aggregation_file"] is not None:
@@ -47,7 +50,7 @@ else:
     with resources.path("boario_tools.data", "aggregation_files") as agg_path:
         aggregation_master_df = find_sectors_agg(
             snakemake.wildcards.mriot_name,
-            snakemake.params["base_aggreg"][snakemake.wildcards.mriot_name],
+            base_aggreg,
             snakemake.wildcards.sectors_aggregation_nofull,
             agg_files_path=agg_path,
         )

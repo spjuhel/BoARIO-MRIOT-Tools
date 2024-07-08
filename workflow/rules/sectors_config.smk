@@ -1,5 +1,21 @@
 ruleorder: full_sector_config_from_exio3 > aggreg_sector_config
 
+rule make_sure_exio3_full_params_are_defined:
+    input:
+        exio3_sectors_config=expand(
+            "{mriot_base_config}/exiobase3_ixi_full_sectors.csv",
+            mriot_base_config=config["mriot_base_config"],
+        ),
+    output:
+        exio3_sectors_config=expand(
+        "{mriot_params_dir}/exiobase3_ixi_full_sectors.csv",
+        mriot_params_dir=config["mriot_params_dir"],
+    ),
+    shell:
+
+
+
+
 rule full_sector_config_from_exio3:
     input:
         exio3_sectors_config=expand(
@@ -52,7 +68,6 @@ rule aggreg_sector_config:
         ),
     params:
         alt_aggregation_file = None,
-        base_aggreg = base_aggreg
     log:
         "logs/{mriot_name}_{sectors_aggregation_nofull}_config.log",
     conda:
