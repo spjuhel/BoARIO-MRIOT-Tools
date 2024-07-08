@@ -43,18 +43,15 @@ def is_icio2021(wildcards):
 
 rule aggreg_sector_config:
     input:
-        sectors_config=expand(
-            branch(
+        sectors_config = branch(
                 condition=is_eora26,
-                then="{mriot_params_dir}/eora26_full_no_reexport_sectors.csv",
+                then=f"{config['mriot_params_dir']}/eora26_full_no_reexport_sectors.csv",
                 otherwise=branch(
                     condition=is_icio2021,
-                    then="{mriot_params_dir}/icio2021_full_reworked_sectors.csv",
-                    otherwise="{mriot_params_dir}/{mriot_name}_full_sectors.csv"
+                    then=f"{config['mriot_params_dir']}/icio2021_full_reworked_sectors.csv",
+                    otherwise=f"{config['mriot_params_dir']}/{mriot_name}_full_sectors.csv"
                 )
-            ),
-            mriot_params_dir=config["mriot_params_dir"],
-        )
+            )
     output:
         agg_sectors_config=expand(
             "{mriot_params_dir}/{{mriot_name}}_{{sectors_aggregation}}.csv",
