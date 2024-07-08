@@ -39,7 +39,7 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 # Install exception handler
 sys.excepthook = handle_exception
 
-base_aggreg = re.search(MRIOT_AGGREG_SECTORS_REGEX,snakemake.input.sectors_config).group(0)
+base_aggreg = re.search(MRIOT_AGGREG_SECTORS_REGEX,snakemake.input.sectors_config).group(1)
 
 sectors_df = pd.read_csv(snakemake.input.sectors_config, index_col=0, decimal=".")
 if snakemake.params["alt_aggregation_file"] is not None:
