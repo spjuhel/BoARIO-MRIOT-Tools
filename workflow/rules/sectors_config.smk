@@ -52,7 +52,7 @@ rule aggreg_sector_config:
                     then="{mriot_params_dir}/icio2021_full_reworked_sectors.csv",
                     otherwise="{mriot_params_dir}/{mriot_name}_full_sectors.csv"
                 )
-            )
+            ),
             mriot_params_dir=config["mriot_params_dir"],
         )
     output:
