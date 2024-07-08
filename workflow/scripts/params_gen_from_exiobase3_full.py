@@ -33,7 +33,7 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 sectors_df = pd.read_csv(
-    snakemake.input.exio3_sectors_config, index_col=0, decimal="."
+    snakemake.input.exio3_sectors_config[0], index_col=0, decimal="."
 )
 if snakemake.params["alt_aggregation_master"] is not None:
     aggregation_master_df = pd.read_excel(
