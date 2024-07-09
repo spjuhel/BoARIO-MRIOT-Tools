@@ -5,9 +5,9 @@ dependencies:
   - numpy
   - geopandas
   - pyarrow
-  - pymrio
+  - pymrio=0.5.3
   - scikit-learn
   - odfpy
   - pip
   - pip:
-      - "git+https://github.com/spjuhel/BoARIO-Tools.git#v0.1.1d"
+      - "git+https://github.com/spjuhel/BoARIO-Tools.git@spirit2#egg=boario_tools"
