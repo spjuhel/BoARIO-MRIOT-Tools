@@ -51,7 +51,7 @@ mriot_file = Path(snakemake.input.full_mriot_pkl)
 mriot = load_mrio(mriot_file.stem, mriot_file.parent.parent)
 sectors_aggregation, regions_aggregation = re.match(MRIOT_AGGREG_REGEX, snakemake.wildcards.aggregation).groups()
 
-sectors_aggregation = None if sectors_aggregation=="full_sectors" else sectors_aggregation
+sectors_aggregation = None if (sectors_aggregation=="full_sectors" or sectors_aggregation=="full_no_reexport_sectors") else sectors_aggregation
 regions_aggregation = None if regions_aggregation=="full_regions" else regions_aggregation
 
 save_dir = Path(snakemake.output[0]).parent
